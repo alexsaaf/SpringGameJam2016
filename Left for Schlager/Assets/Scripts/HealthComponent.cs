@@ -13,6 +13,9 @@ public class HealthComponent : MonoBehaviour {
 	private int hungerFactor;
 	private int maxHealth;
 	private int maxHunger;
+	private float time;
+	[SerializeField]
+	private float secondsToWait;
 
 	private int Clamp(int value, int maxValue, int minValue) {
 		if (value > maxValue) {
@@ -72,6 +75,13 @@ public class HealthComponent : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		// Eventual fix to make this decrease per time?
+		time += Time.deltaTime;
+		if (time >= secondsToWait) {
+			return;
+		} else {
+			time = 0;
+		}
 		if (hunger > 0) {
 			hunger = Clamp(hunger - hungerFactor, maxHunger, 0);
 			if (health < 100) {
