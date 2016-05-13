@@ -7,4 +7,4 @@ Game project for spring game jam
  - Kefvin
  - Svante
  - Siemens
- - Oturen
+ - Oturen (AKA: fumoffu947)
