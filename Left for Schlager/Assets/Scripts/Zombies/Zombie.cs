@@ -5,10 +5,20 @@ public class Zombie : MonoBehaviour {
 
     public int health = 100;
 
+    public States state;
+    public enum States { Happy, Sad, Mad};
+
+
     [SerializeField]
     private float viewRange = 25f;
     [SerializeField]
     private float attackRange = 5f;
+
+    [SerializeField]
+    private float thinkTimer = 5f;
+    private float thinkTimerStart;
+
+    public float randomUnitCircleRadius = 10f;
 
     public bool isChasing = false;
 
@@ -19,11 +29,18 @@ public class Zombie : MonoBehaviour {
 	void Start () {
         playerTransform = null;
         agent = GetComponent<NavMeshAgent>();
+        thinkTimerStart = thinkTimer;
 	}
 	
 	void Update () {
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hitinfo;
+
+        thinkTimer -= Time.deltaTime;
+        if(thinkTimer < 0) {
+            Think();
+            thinkTimer = thinkTimerStart;
+        }
 
         //Check if we can see the player
         if(Physics.Raycast(ray, out hitinfo, viewRange)) {
@@ -60,6 +77,13 @@ public class Zombie : MonoBehaviour {
     private void CheckHealth() {
         if(health <= 0) {
             Destroy(gameObject);
+        }
+    }
+
+    private void Think() {
+        if (!isChasing) {
+            Vector3 newPos = transform.position + new Vector3(Random.insideUnitCircle.x * randomUnitCircleRadius, transform.position.y, Random.insideUnitCircle.y * randomUnitCircleRadius);
+            agent.SetDestination(newPos);
         }
     }
 }

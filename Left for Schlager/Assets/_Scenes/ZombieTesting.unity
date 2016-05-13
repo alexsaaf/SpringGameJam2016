@@ -293,8 +293,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  state: 0
   viewRange: 20
   attackRange: 5
+  thinkTimer: 5
+  randomUnitCircleRadius: 10
   isChasing: 0
   playerTransform: {fileID: 0}
 --- !u!23 &1546238604
