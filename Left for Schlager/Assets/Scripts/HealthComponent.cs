@@ -16,9 +16,9 @@ public class HealthComponent : MonoBehaviour {
 
 	private int Clamp(int value, int maxValue, int minValue) {
 		if (value > maxValue) {
-			return MAX_VALUE;
+			return maxValue;
 		} else if (value < minValue) {
-			return MIN_VALUE;
+			return minValue;
 		} else {
 			return value;
 		}
@@ -73,7 +73,7 @@ public class HealthComponent : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (hunger > 0) {
-			hunger = Clamp(hunger - hungerFactor);
+			hunger = Clamp(hunger - hungerFactor, maxHunger, 0);
 			if (health < 100) {
 				hunger = hunger - hungerFactor;
 				health = health + healthFactor;
