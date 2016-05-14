@@ -50,6 +50,10 @@ public class PlayerStatusScript : MonoBehaviour {
 
     #region Functions
 
+    public void Hurt(float value) {
+    	health = Clamp(health - value, maxHealth, 0);
+    }
+
     public void UseRation() {
         if (rations > 0) {
             hunger = Clamp(RATION_REG, maxHunger, 0);
