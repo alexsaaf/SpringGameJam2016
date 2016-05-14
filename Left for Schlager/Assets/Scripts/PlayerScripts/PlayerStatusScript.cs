@@ -95,6 +95,7 @@ public class PlayerStatusScript : MonoBehaviour {
     }
 
     public bool NoEnergyLeft() {
+        Debug.Log("total energu" + energy);
         return noEnergyLeft;
     }
 
@@ -136,10 +137,10 @@ public class PlayerStatusScript : MonoBehaviour {
     private void UpdateEnergy() {
         if (droneInUse) {
             if (droneMoving) {
-                energy -= Clamp(dynamicDroneDrain * Time.deltaTime, maxEnergy, 0);
+                energy = Clamp(energy - dynamicDroneDrain * Time.deltaTime, maxEnergy, 0);
             }
             else {
-                energy -= Clamp(staticDroneDrain * Time.deltaTime, maxEnergy, 0);
+                energy = Clamp(energy - staticDroneDrain * Time.deltaTime, maxEnergy, 0);
             }
         }
         if (energy == 0) {
@@ -189,7 +190,12 @@ public class PlayerStatusScript : MonoBehaviour {
             Destroy(other.gameObject);
         }
         else if (other.gameObject.CompareTag("Drone")) {
-            Debug.Log("Pickin up drone");
+            drone.PickUpDrone();
+        }
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        if (collision.collider.gameObject.CompareTag("Drone")) {
             drone.PickUpDrone();
         }
     }

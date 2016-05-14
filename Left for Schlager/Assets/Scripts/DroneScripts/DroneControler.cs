@@ -155,8 +155,12 @@ public class DroneControler : MonoBehaviour {
 
     // pickup the drone
     public void PickUpDrone() {
+        rb.velocity = new Vector3(0,0,0);
+        rb.freezeRotation = true;
+        rb.useGravity = false;
         transform.eulerAngles = new Vector3(0F, 0F, 0F);
         HideDrone();
+        rb.freezeRotation = false;
     }
 
     private GameObject GetObjectInLine() {
