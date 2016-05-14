@@ -8,7 +8,7 @@ public class DroneControler : MonoBehaviour {
     [SerializeField]
     private float moveSpeed = 5F;
     [SerializeField]
-    private float hightToRise  = 30F;
+    private float hightToRise  = 10F;
     [SerializeField]
     private GameObject playerObject;
     private PlayerStatusScript playerStatusScript;
@@ -51,6 +51,8 @@ public class DroneControler : MonoBehaviour {
     private AudioListener playerAudioListener;
 
     private bool togglePressed;
+    private float timeWhenResumed = 20F;
+    private bool releasedVAfterResume = true;
     [SerializeField]
     private float pressedTime = 1F;
     #endregion
@@ -58,11 +60,14 @@ public class DroneControler : MonoBehaviour {
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
+        HideDrone();
         animationDone = false;
         gotenStartPose = false;
-        ControleDrone();
         togglePressed = false;
         pressedTime = 0F;
+
+        playerStatusScript = playerObject.GetComponent<PlayerStatusScript>();
 
         playerCamera = playerObject.GetComponentInChildren<Camera>();
         camera = GetComponentInChildren<Camera>();
@@ -70,7 +75,7 @@ public class DroneControler : MonoBehaviour {
         audioListener = playerObject.GetComponentInChildren<Camera>().GetComponent<AudioListener>();
         playerAudioListener = GetComponentInChildren<Camera>().GetComponent<AudioListener>();
 
-        ControleDrone();
+        ControlePlayer();
 
         primaryTimerStart = primaryTimer;
         secondaryTimerStart = secondaryTimer;
@@ -78,7 +83,19 @@ public class DroneControler : MonoBehaviour {
         key2TimerStart = key2Timer;
         key3TimerStart = key3Timer;
 
-        playerStatusScript = playerObject.GetComponent<PlayerStatusScript>();
+        Debug.Log("Start Drone Done");
+    }
+
+    // show the drone
+    private void ShowDrone() {
+        GetComponent<Renderer>().enabled = true;
+        GetComponent<BoxCollider>().enabled = true;
+    }
+
+    //Hide the drone
+    private void HideDrone() {
+        GetComponent<Renderer>().enabled = false;
+        GetComponent<BoxCollider>().enabled = false;
     }
 
     // to call when to after pickup of the drone
@@ -89,37 +106,51 @@ public class DroneControler : MonoBehaviour {
 
     // Used to start from the begining not resuming
     public void Restart(Vector3 startPosition) {
+        Debug.Log("Restarted Drone");
+        rb.useGravity = false;
         playerStatusScript.SetEnablePlayerInput(false);
         Reset();
         transform.position = startPosition;
         ControleDrone();
-        GetComponent<Renderer>().enabled = false;
-        GetComponent<BoxCollider>().enabled = false;
+        ShowDrone();
     }
 
     // Used to resume the control of the drone
     public void Resume() {
+        Debug.Log("REsumed Drone");
+        rb.useGravity = false;
         playerStatusScript.SetEnablePlayerInput(false);
         ControleDrone();
-        GetComponent<Renderer>().enabled = false;
-        GetComponent<BoxCollider>().enabled = false;
+        ShowDrone();
+        releasedVAfterResume = false;
     }
 
     //Used to pause the drone and return control to the player
     private void Pause() {
-        ControlPlayer();
+        Debug.Log("Paused Drone");
+        ControlePlayer();
         playerStatusScript.SetDroneIdle();
         playerStatusScript.SetEnablePlayerInput(true);
     }
 
     // Disable drone and return it to the user
      private void Kill() {
-        ControlPlayer();
-        GetComponent<Renderer>().enabled = false;
-        GetComponent<BoxCollider>().enabled = false;
+        Debug.Log("Killed drone");
+        ControlePlayer();
+        HideDrone();
         Reset();
         playerStatusScript.SetDroneNotInUse();
         playerStatusScript.SetEnablePlayerInput(true);
+    }
+
+    // Disable drone and return it to the user
+    private void KillAndFall() {
+        Debug.Log("Kill and fall Drone");
+        ControlePlayer();
+        Reset();
+        playerStatusScript.SetDroneNotInUse();
+        playerStatusScript.SetEnablePlayerInput(true);
+        rb.useGravity = true;
     }
 
     private GameObject GetObjectInLine() {
@@ -137,12 +168,13 @@ public class DroneControler : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (rb.position.y > startHight + hightToRise) {
+        if (rb.position.y > startHight + hightToRise && ! animationDone) {
             animationDone = true;
         }
         if (!animationDone) {
-            if (gotenStartPose) {
+            if (!gotenStartPose) {
                 startHight = rb.position.y;
+                gotenStartPose = true;
             }
             rb.MovePosition(transform.position + new Vector3(0, moveSpeed, 0) * Time.deltaTime);
         }
@@ -201,13 +233,14 @@ public class DroneControler : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         TickTimers();
-        if (animationDone) {
+        if (animationDone && releasedVAfterResume) {
             // Check time for when the DroneToggle is pressed
             if (Input.GetAxisRaw("DroneToggle") > 0 && !togglePressed) {
                 pressedTime = Time.time;
                 togglePressed = true;
                 // if the time is below 1 sec go into idle else go back to user
-            } if (Input.GetAxisRaw("DroneToggle") == 0 && togglePressed) {
+            }
+            if (Input.GetAxisRaw("DroneToggle") == 0 && togglePressed) {
                 float pressedDeltaTime = Time.time - pressedTime;
                 print("deltatime pressed " + pressedDeltaTime);
                 if (pressedDeltaTime > 1F) {
@@ -216,6 +249,7 @@ public class DroneControler : MonoBehaviour {
                 else {
                     Pause();
                 }
+                togglePressed = false;
             }
             // El-Chock
             if (Input.GetAxisRaw("SecondaryFire") > 0 && secondaryReady) {
@@ -233,26 +267,28 @@ public class DroneControler : MonoBehaviour {
             }
             // Moln (Emotion change)
             if (Input.GetAxisRaw("Key1") > 0 && key1Ready) {
-                print("pressed Key" +1);
+                print("pressed Key" + 1);
                 key1Ready = false;
             }
             // Bomb, Invis-Cloud ...
             if (Input.GetAxisRaw("Key2") > 0 && key2Ready) {
-                print("pressed Key" +2);
+                print("pressed Key" + 2);
                 key2Ready = false;
             }
             // El-Bomb (Consumes much energy)
             if (Input.GetAxisRaw("Key3") > 0 && key3Ready) {
-                print("pressed Key" +3);
+                print("pressed Key" + 3);
                 key3Ready = false;
             }
 
+        }
+        else if (!releasedVAfterResume || (Time.time - timeWhenResumed) > 2) {
+            releasedVAfterResume = true;
         }
 	}
 
     // Disable player and start drone control
     private void ControleDrone() {
-        rb.useGravity = false;
         // Camera Enable/Disable
         if (playerCamera != null && camera != null) {
             playerCamera.enabled = false;
@@ -279,11 +315,11 @@ public class DroneControler : MonoBehaviour {
     }
 
     // Diable control of drone and enable player
-    private void ControlPlayer() {
+    private void ControlePlayer() {
         // Camera Enable/Disable
         if (playerCamera != null && camera != null) {
             playerCamera.enabled = true;
-        camera.enabled = false;
+            camera.enabled = false;
         } else {
             Debug.LogError("Camera is null for player or the drone");
         }

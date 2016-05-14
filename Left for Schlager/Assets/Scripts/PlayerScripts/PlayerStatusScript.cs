@@ -51,7 +51,7 @@ public class PlayerStatusScript : MonoBehaviour {
     private GameObject droneObject;
     private DroneControler drone;
 
-    private bool enablePlayerInput;
+    private bool enablePlayerInput = true;
 
     #endregion
 
