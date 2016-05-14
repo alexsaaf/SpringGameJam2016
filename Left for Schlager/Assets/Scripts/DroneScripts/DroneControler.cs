@@ -85,7 +85,7 @@ public class DroneControler : MonoBehaviour {
     }
 
     // Used to start from the begining not resuming
-    void Restart(Vector3 startPosition) {
+    public void Restart(Vector3 startPosition) {
         Reset();
         transform.position = startPosition;
         ControleDrone();
@@ -94,7 +94,7 @@ public class DroneControler : MonoBehaviour {
     }
 
     // Used to resume the control of the drone
-    void Resume() {
+    public void Resume() {
         ControleDrone();
         GetComponent<Renderer>().enabled = false;
         GetComponent<BoxCollider>().enabled = false;

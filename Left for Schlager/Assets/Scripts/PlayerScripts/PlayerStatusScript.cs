@@ -48,7 +48,9 @@ public class PlayerStatusScript : MonoBehaviour {
     private bool droneInUse;
     private bool droneMoving;
     [SerializeField]
-    private Drone drone;
+    private GameObject droneObject;
+    private DroneControler drone;
+
     private bool enablePlayerInput;
 
     #endregion
@@ -82,7 +84,7 @@ public class PlayerStatusScript : MonoBehaviour {
         droneMoving = false;
     }
 
-    public void setEnablePlayerInput(bool flag) {
+    public void SetEnablePlayerInput(bool flag) {
         this.enablePlayerInput = flag;
     }
 
@@ -95,6 +97,7 @@ public class PlayerStatusScript : MonoBehaviour {
         energy = maxEnergy;
         droneInUse = false;
         droneMoving = false;
+        drone = droneObject.GetComponent<DroneControler>();
     }
 
     // Update is called once per frame
@@ -152,8 +155,8 @@ public class PlayerStatusScript : MonoBehaviour {
             // CHANGE TO DRONE
             if (droneInUse && !droneMoving) {
                 drone.Resume();
-            } else {
-                drone.Restart(/*Vector*/);
+            } else { 
+                drone.Restart(transform.position + transform.forward*3);
             }
             droneInUse = true;
             droneMoving = true;
