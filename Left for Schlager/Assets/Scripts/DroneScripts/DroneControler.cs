@@ -10,7 +10,7 @@ public class DroneControler : MonoBehaviour {
     [SerializeField]
     private float hightToRise  = 30F;
     [SerializeField]
-    private GameObject player;
+    private GameObject playerObject;
     [SerializeField]
     private float mouseSensitivity = 4F;
     private Vector3 input;
@@ -63,10 +63,10 @@ public class DroneControler : MonoBehaviour {
         togglePressed = false;
         pressedTime = 0F;
 
-        playerCamera = player.GetComponentInChildren<Camera>();
+        playerCamera = playerObject.GetComponentInChildren<Camera>();
         camera = GetComponentInChildren<Camera>();
-        playerController = player.GetComponent<UnityStandardAssets.Characters.FirstPerson.RigidbodyFirstPersonController>();
-        audioListener = player.GetComponentInChildren<Camera>().GetComponent<AudioListener>();
+        playerController = playerObject.GetComponent<UnityStandardAssets.Characters.FirstPerson.RigidbodyFirstPersonController>();
+        audioListener = playerObject.GetComponentInChildren<Camera>().GetComponent<AudioListener>();
         playerAudioListener = GetComponentInChildren<Camera>().GetComponent<AudioListener>();
 
         ControleDrone();
