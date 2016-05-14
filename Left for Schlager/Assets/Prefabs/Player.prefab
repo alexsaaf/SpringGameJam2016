@@ -46,6 +46,7 @@ GameObject:
   - 54: {fileID: 5496574}
   - 136: {fileID: 13655214}
   - 114: {fileID: 11415288}
+  - 114: {fileID: 11450276}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -289,6 +290,29 @@ MonoBehaviour:
   rigidbodyFirstPersonController: {fileID: 11415288}
   StrideInterval: 4
   RunningStrideLengthen: 0.722
+--- !u!114 &11450276
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 132902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e79ea9ead4706a4181abac8e3f3a0fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
+  hunger: 0
+  healthFactor: 0
+  hungerFactor: 0
+  energy: 0
+  staticDroneDrain: 0
+  dynamicDroneDrain: 0
+  normalSpeed: 0
+  rations: 0
+  batteries: 0
+  hungerLimit: 0
+  hungrySpeed: 0
 --- !u!136 &13655214
 CapsuleCollider:
   m_ObjectHideFlags: 1
