@@ -5,29 +5,23 @@ public class PlayerStatusScript : MonoBehaviour {
 
     #region Variables
 
-    // Health fields
+    // Health and hunger fields
     [SerializeField]
+    private float maxHealth;
+    [SerializeField]
+    private float maxHunger;
     private float health;
-    [SerializeField]
     private float hunger;
     [SerializeField]
     private float healthFactor;
     [SerializeField]
     private float hungerFactor;
-    private float maxHealth;
-    private float maxHunger;
     private float time;
 
     // Energy fields
-    [SerializeField]
     private float energy;
     [SerializeField]
-    private float staticDroneDrain;
-    [SerializeField]
-    private float dynamicDroneDrain;
     private float maxEnergy;
-    private bool droneInUse;
-    private bool droneMoving;
 
     // Player fields
     [SerializeField]
@@ -46,12 +40,23 @@ public class PlayerStatusScript : MonoBehaviour {
     [SerializeField]
     private float hungrySpeed;
 
+    // Drone fields
+    [SerializeField]
+    private float staticDroneDrain;
+    [SerializeField]
+    private float dynamicDroneDrain;
+    private bool droneInUse;
+    private bool droneMoving;
+    [SerializeField]
+    private Drone drone;
+    private bool enablePlayerInput;
+
     #endregion
 
     #region Functions
 
     public void Hurt(float value) {
-    	health = Clamp(health - value, maxHealth, 0);
+        health = Clamp(health - value, maxHealth, 0);
     }
 
     public void UseRation() {
@@ -77,13 +82,17 @@ public class PlayerStatusScript : MonoBehaviour {
         droneMoving = false;
     }
 
+    public void setEnablePlayerInput(bool flag) {
+        this.enablePlayerInput = flag;
+    }
+
     #endregion
 
     // Use this for initialization
     void Start() {
-        maxHealth = health;
-        maxHunger = hunger;
-        maxEnergy = energy;
+        health = maxHealth;
+        hunger = maxHunger;
+        energy = maxEnergy;
         droneInUse = false;
         droneMoving = false;
     }
@@ -93,7 +102,9 @@ public class PlayerStatusScript : MonoBehaviour {
         UpdateHungerAndHealth();
         UpdateEnergy();
         //UpdateSpeed();
-        UpdateInput();
+        if (enablePlayerInput) {
+            UpdateInput();
+        }
     }
 
     #region Update_Functions
@@ -133,15 +144,21 @@ public class PlayerStatusScript : MonoBehaviour {
     }
 
     private void UpdateInput() {
-        if (Input.GetKeyDown(KeyCode.R)) {
+        if (Input.GetAxisRaw("UseRation") > 0) {
             UseRation();
-        } else if (Input.GetKeyDown(KeyCode.E)) {
+        } else if (Input.GetAxisRaw("Interact") > 0) {
             // INTERACT
-        } else if (Input.GetKeyDown(KeyCode.V)) {
-            //  CHANGE TO DRONE
+        } else if (Input.GetAxisRaw("DroneToggle") > 0) {
+            // CHANGE TO DRONE
+            if (droneInUse && !droneMoving) {
+                drone.Resume();
+            } else {
+                drone.Restart(/*Vector*/);
+            }
             droneInUse = true;
             droneMoving = true;
-            //Restart, Resume
+        } else if (Input.GetAxisRaw("PrimaryFire") > 0) {
+            // ATATCK WITH MELEE, START ANIMATION
         }
     }
 
