@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Battery
   - Ration
+  - Drone
   layers:
   - Default
   - TransparentFX
