@@ -96,7 +96,6 @@ public class PlayerStatusScript : MonoBehaviour {
     }
 
     public bool NoEnergyLeft() {
-        Debug.Log("total energu" + energy);
         return noEnergyLeft;
     }
 

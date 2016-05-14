@@ -150,6 +150,7 @@ public class Zombie : MonoBehaviour {
 
     //Take the given damage
     public void TakeDamage(float amount) {
+        Debug.Log("Took DMG: " + amount);
         health -= amount;
         Debug.Log("TAKE DAMAGE, now: " + health.ToString());
         if(health <= 0)
