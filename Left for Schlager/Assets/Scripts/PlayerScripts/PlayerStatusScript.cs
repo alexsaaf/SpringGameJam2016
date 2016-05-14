@@ -22,6 +22,7 @@ public class PlayerStatusScript : MonoBehaviour {
     private float energy;
     [SerializeField]
     private float maxEnergy;
+    private bool noEnergyLeft;
 
     // Player fields
     [SerializeField]
@@ -39,6 +40,7 @@ public class PlayerStatusScript : MonoBehaviour {
     private float hungerLimit;
     [SerializeField]
     private float hungrySpeed;
+    private bool enablePlayerInput;
 
     // Drone fields
     [SerializeField]
@@ -50,8 +52,8 @@ public class PlayerStatusScript : MonoBehaviour {
     [SerializeField]
     private GameObject droneObject;
     private DroneControler drone;
-
-    private bool enablePlayerInput;
+    
+    // Machete fields
 
     #endregion
 
@@ -68,11 +70,14 @@ public class PlayerStatusScript : MonoBehaviour {
         }
     }
 
-    public void UseBattery() {
+    public bool UseBattery() {
         if (batteries > 0) {
             energy += BATTERY_REG;
             batteries--;
+            noEnergyLeft = false;
+            return true;
         }
+        return false;
     }
 
     public void SetDroneNotInUse() {
@@ -133,7 +138,9 @@ public class PlayerStatusScript : MonoBehaviour {
             }
         }
         if (energy == 0) {
-            UseBattery();
+            if (!UseBattery()) {
+                noEnergyLeft = true;
+            }
         }
     }
 
