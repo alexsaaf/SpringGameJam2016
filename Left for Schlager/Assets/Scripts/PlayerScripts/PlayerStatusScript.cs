@@ -64,11 +64,12 @@ public class PlayerStatusScript : MonoBehaviour {
         }
     }
 
-    public void setDroneNotInUse() {
+    public void SetDroneNotInUse() {
         droneInUse = false;
+        droneMoving = false;
     }
 
-    public void setDroneIdle() {
+    public void SetDroneIdle() {
         droneMoving = false;
     }
 
@@ -87,7 +88,7 @@ public class PlayerStatusScript : MonoBehaviour {
     void Update() {
         UpdateHungerAndHealth();
         UpdateEnergy();
-        UpdateSpeed();
+        //UpdateSpeed();
         UpdateInput();
     }
 
@@ -136,6 +137,7 @@ public class PlayerStatusScript : MonoBehaviour {
             //  CHANGE TO DRONE
             droneInUse = true;
             droneMoving = true;
+            //Restart, Resume
         }
     }
 
@@ -151,7 +153,7 @@ public class PlayerStatusScript : MonoBehaviour {
         }
     }
 
-    private int Clamp(float value, float maxValue, float minValue) {
+    private float Clamp(float value, float maxValue, float minValue) {
         if (value > maxValue) {
             return maxValue;
         } else if (value < minValue) {
