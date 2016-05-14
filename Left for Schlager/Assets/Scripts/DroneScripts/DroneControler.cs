@@ -11,6 +11,7 @@ public class DroneControler : MonoBehaviour {
     private float hightToRise  = 30F;
     [SerializeField]
     private GameObject playerObject;
+    private PlayerStatusScript playerStatusScript;
     [SerializeField]
     private float mouseSensitivity = 4F;
     private Vector3 input;
@@ -76,6 +77,8 @@ public class DroneControler : MonoBehaviour {
         key1TimerStart = key1Timer;
         key2TimerStart = key2Timer;
         key3TimerStart = key3Timer;
+
+        playerStatusScript = playerObject.GetComponent<PlayerStatusScript>();
     }
 
     // to call when to after pickup of the drone
@@ -86,6 +89,7 @@ public class DroneControler : MonoBehaviour {
 
     // Used to start from the begining not resuming
     public void Restart(Vector3 startPosition) {
+        playerStatusScript.SetEnablePlayerInput(false);
         Reset();
         transform.position = startPosition;
         ControleDrone();
@@ -95,6 +99,7 @@ public class DroneControler : MonoBehaviour {
 
     // Used to resume the control of the drone
     public void Resume() {
+        playerStatusScript.SetEnablePlayerInput(false);
         ControleDrone();
         GetComponent<Renderer>().enabled = false;
         GetComponent<BoxCollider>().enabled = false;
@@ -103,7 +108,8 @@ public class DroneControler : MonoBehaviour {
     //Used to pause the drone and return control to the player
     private void Pause() {
         ControlPlayer();
-        // player.SetDroneIdle();
+        playerStatusScript.SetDroneIdle();
+        playerStatusScript.SetEnablePlayerInput(true);
     }
 
     // Disable drone and return it to the user
@@ -112,7 +118,8 @@ public class DroneControler : MonoBehaviour {
         GetComponent<Renderer>().enabled = false;
         GetComponent<BoxCollider>().enabled = false;
         Reset();
-        // player.SetDroneNotInUse();
+        playerStatusScript.SetDroneNotInUse();
+        playerStatusScript.SetEnablePlayerInput(true);
     }
 
     private GameObject GetObjectInLine() {
