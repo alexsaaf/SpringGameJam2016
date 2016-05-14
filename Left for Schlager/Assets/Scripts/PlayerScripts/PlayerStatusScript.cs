@@ -100,7 +100,7 @@ public class PlayerStatusScript : MonoBehaviour {
     }
 
     #endregion
-
+        
     // Use this for initialization
     void Start() {
         health = maxHealth;
