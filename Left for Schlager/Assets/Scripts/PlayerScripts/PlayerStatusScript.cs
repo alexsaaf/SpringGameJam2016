@@ -182,7 +182,6 @@ public class PlayerStatusScript : MonoBehaviour {
 
         }
         if (Input.GetAxisRaw("PrimaryFire") > 0) {
-            Debug.Log("FIRE");
             transform.Find("Machete").gameObject.GetComponent<MacheteScript>().SwingMachete();
         }
     }
