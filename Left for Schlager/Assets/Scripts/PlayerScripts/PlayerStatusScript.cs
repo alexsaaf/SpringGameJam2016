@@ -109,7 +109,7 @@ public class PlayerStatusScript : MonoBehaviour {
         droneInUse = false;
         droneMoving = false;
         drone = droneObject.GetComponent<DroneControler>();
-        machete = transform.Find("MainCamera").Find("Machete").gameObject;
+        machete = transform.Find("Machete").gameObject;
     }
 
     // Update is called once per frame

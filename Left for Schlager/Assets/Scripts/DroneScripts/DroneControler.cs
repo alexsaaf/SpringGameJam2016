@@ -48,6 +48,9 @@ public class DroneControler : MonoBehaviour {
     private bool key2Ready = true;
     private bool key3Ready = true;
 
+    [SerializeField]
+    private Canvas droneCrosshair;
+
     private Camera camera;
     private Camera playerCamera;
     private UnityStandardAssets.Characters.FirstPerson.RigidbodyFirstPersonController playerController;
@@ -87,6 +90,8 @@ public class DroneControler : MonoBehaviour {
         key2TimerStart = key2Timer;
         key3TimerStart = key3Timer;
 
+        droneCrosshair.enabled = false;
+
         Debug.Log("Start Drone Done");
     }
 
@@ -111,6 +116,7 @@ public class DroneControler : MonoBehaviour {
     // Used to start from the begining not resuming
     public void Restart(Vector3 startPosition) {
         Debug.Log("Restarted Drone");
+        droneCrosshair.enabled = true;
         animationStartTime = Time.time;
         rb.useGravity = false;
         playerStatusScript.SetEnablePlayerInput(false);
@@ -123,7 +129,7 @@ public class DroneControler : MonoBehaviour {
     // Used to resume the control of the drone
     public void Resume() {
         Debug.Log("REsumed Drone");
-        
+        droneCrosshair.enabled = true;
         rb.useGravity = false;
         playerStatusScript.SetEnablePlayerInput(false);
         ControleDrone();
@@ -134,6 +140,7 @@ public class DroneControler : MonoBehaviour {
     //Used to pause the drone and return control to the player
     private void Pause() {
         Debug.Log("Paused Drone");
+        droneCrosshair.enabled = false;
         ControlePlayer();
         playerStatusScript.SetDroneIdle();
         playerStatusScript.SetEnablePlayerInput(true);
@@ -142,6 +149,7 @@ public class DroneControler : MonoBehaviour {
     // Disable drone and return it to the user
      private void Kill() {
         Debug.Log("Killed drone");
+        droneCrosshair.enabled = false;
         ControlePlayer();
         HideDrone();
         Reset();
@@ -152,6 +160,7 @@ public class DroneControler : MonoBehaviour {
     // Disable drone and return it to the user
     private void KillAndFall() {
         Debug.Log("Kill and fall Drone");
+        droneCrosshair.enabled = false;
         ControlePlayer();
         Reset();
         playerStatusScript.SetDroneNotInUse();
@@ -174,8 +183,8 @@ public class DroneControler : MonoBehaviour {
         RaycastHit hitInfo;
         if (Physics.Raycast(rayDirection, out hitInfo, 100F)) {
             Debug.Log("Found object (RayCast): " + hitInfo.transform.tag);
-            if (hitInfo.transform.tag == "Zombie") {
-                return hitInfo.collider.gameObject;
+            if (hitInfo.transform.CompareTag("Zombie")) {
+                return hitInfo.collider.transform.parent.gameObject;
             }
             else return null;
         }
@@ -290,6 +299,7 @@ public class DroneControler : MonoBehaviour {
             // Moln (Emotion change)
             if (Input.GetAxisRaw("Key1") > 0 && key1Ready) {
                 print("pressed Key" + 1);
+                Instantiate(Resources.Load("Assets/Prefabs/Bomb"));
                 key1Ready = false;
             }
             // Bomb, Invis-Cloud ...
