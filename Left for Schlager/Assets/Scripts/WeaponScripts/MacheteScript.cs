@@ -4,8 +4,8 @@ using System.Collections;
 public class MacheteScript : MonoBehaviour{
 
     [SerializeField]
-    private bool attacking = false;
     private float attackDamage;
+    private bool attacking = false;
     private Animator animator;
 
     // Use this for initialization
@@ -19,7 +19,7 @@ public class MacheteScript : MonoBehaviour{
 
     }
 
-    void SwingMachete() {
+    public void SwingMachete() {
         if (attacking == false)
         {
             attacking = true;
@@ -35,9 +35,8 @@ public class MacheteScript : MonoBehaviour{
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Zombie") && attacking)
-        {
-            //Deal damage to zombie
+        if (other.gameObject.CompareTag("Zombie") && attacking) {
+            //other.gameObject.GetComponent<Zombie>().TakeDamage(attackDamage);
         }
     }
 }
