@@ -32,6 +32,8 @@ public class DroneControler : MonoBehaviour {
     [SerializeField]
     private float key3Timer = 1F;
 
+    private float animationStartTime = 0F;
+
     private float primaryTimerStart;
     private float secondaryTimerStart;
     private float key1TimerStart;
@@ -107,6 +109,7 @@ public class DroneControler : MonoBehaviour {
     // Used to start from the begining not resuming
     public void Restart(Vector3 startPosition) {
         Debug.Log("Restarted Drone");
+        animationStartTime = Time.time;
         rb.useGravity = false;
         playerStatusScript.SetEnablePlayerInput(false);
         Reset();
@@ -118,6 +121,7 @@ public class DroneControler : MonoBehaviour {
     // Used to resume the control of the drone
     public void Resume() {
         Debug.Log("REsumed Drone");
+        
         rb.useGravity = false;
         playerStatusScript.SetEnablePlayerInput(false);
         ControleDrone();
@@ -153,6 +157,16 @@ public class DroneControler : MonoBehaviour {
         rb.useGravity = true;
     }
 
+    // pickup the drone
+    public void PickUpDrone() {
+        rb.velocity = new Vector3(0,0,0);
+        rb.freezeRotation = true;
+        rb.useGravity = false;
+        transform.eulerAngles = new Vector3(0F, 0F, 0F);
+        HideDrone();
+        rb.freezeRotation = false;
+    }
+
     private GameObject GetObjectInLine() {
         Ray rayDirection = new Ray(transform.position, transform.up * -1);
         RaycastHit hitInfo;
@@ -170,6 +184,12 @@ public class DroneControler : MonoBehaviour {
     void FixedUpdate() {
         if (rb.position.y > startHight + hightToRise && ! animationDone) {
             animationDone = true;
+        }
+        // If rising takes to long it is stuck then kill and go back to player
+        if (!animationDone && (Time.time - animationStartTime) > 15F) {
+            if (!(rb.position.y > startHight + hightToRise)) {
+                Kill();
+            }
         }
         if (!animationDone) {
             if (!gotenStartPose) {
@@ -196,32 +216,32 @@ public class DroneControler : MonoBehaviour {
         if (primaryTimer > 0 && !primaryReady) {
             primaryTimer -= dt;
         }
-        else if (primaryTimer < 0) {
+        else if (primaryTimer <= 0) {
             primaryTimer = primaryTimerStart;
             primaryReady = true;
         }
-        if (secondaryTimer > 0) {
+        if (secondaryTimer > 0 && !secondaryReady) {
             secondaryTimer -= dt;
         }
-        else if (secondaryTimer < 0) {
+        else if (secondaryTimer <= 0) {
             secondaryTimer = secondaryTimerStart;
             secondaryReady = true;
         }
-        if (key1Timer > 0) {
+        if (key1Timer > 0 && !key1Ready) {
             key1Timer -= dt;
         }
         else if (key1Timer < 0) {
             key1Timer = key1TimerStart;
             key1Ready = true;
         }
-        if (key2Timer > 0) {
+        if (key2Timer > 0 && !key2Ready) {
             key2Timer -= dt;
         }
         else if (key2Timer < 0) {
             key2Timer = key2TimerStart;
             key2Ready = true;
         }
-        if (key3Timer > 0) {
+        if (key3Timer > 0 && !key3Ready) {
             key3Timer -= dt;
         }
         else if (key3Timer < 0) {
@@ -284,6 +304,9 @@ public class DroneControler : MonoBehaviour {
         }
         else if (!releasedVAfterResume || (Time.time - timeWhenResumed) > 2) {
             releasedVAfterResume = true;
+        }
+        if (playerStatusScript.NoEnergyLeft()) {
+            KillAndFall();
         }
 	}
 

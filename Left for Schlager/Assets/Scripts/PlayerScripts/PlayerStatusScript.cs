@@ -95,6 +95,7 @@ public class PlayerStatusScript : MonoBehaviour {
     }
 
     public bool NoEnergyLeft() {
+        Debug.Log("total energu" + energy);
         return noEnergyLeft;
     }
 
@@ -136,10 +137,10 @@ public class PlayerStatusScript : MonoBehaviour {
     private void UpdateEnergy() {
         if (droneInUse) {
             if (droneMoving) {
-                energy -= Clamp(dynamicDroneDrain * Time.deltaTime, maxEnergy, 0);
+                energy = Clamp(energy - dynamicDroneDrain * Time.deltaTime, maxEnergy, 0);
             }
             else {
-                energy -= Clamp(staticDroneDrain * Time.deltaTime, maxEnergy, 0);
+                energy = Clamp(energy - staticDroneDrain * Time.deltaTime, maxEnergy, 0);
             }
         }
         if (energy == 0) {
@@ -161,19 +162,28 @@ public class PlayerStatusScript : MonoBehaviour {
     private void UpdateInput() {
         if (Input.GetAxisRaw("UseRation") > 0) {
             UseRation();
-        } else if (Input.GetAxisRaw("Interact") > 0) {
+        }
+        if (Input.GetAxisRaw("Interact") > 0) {
             // INTERACT
-        } else if (Input.GetAxisRaw("DroneToggle") > 0) {
+        }
+        if (Input.GetAxisRaw("DroneToggle") > 0)
+        {
             // CHANGE TO DRONE
-            if (droneInUse && !droneMoving) {
+            if (droneInUse && !droneMoving)
+            {
                 drone.Resume();
-            } else { 
-                drone.Restart(transform.position + transform.forward*3);
+            }
+            else
+            {
+                drone.Restart(transform.position + transform.forward * 3);
             }
             droneInUse = true;
             droneMoving = true;
-        } else if (Input.GetAxisRaw("PrimaryFire") > 0) {
-            // ATATCK WITH MELEE, START ANIMATION
+
+        }
+        if (Input.GetAxisRaw("PrimaryFire") > 0) {
+            Debug.Log("FIRE");
+            transform.Find("Machete").gameObject.GetComponent<MacheteScript>().SwingMachete();
         }
     }
 
@@ -183,9 +193,19 @@ public class PlayerStatusScript : MonoBehaviour {
         if (other.gameObject.CompareTag("Ration")) {
             rations += 1;
             Destroy(other.gameObject);
-        } else if (other.gameObject.CompareTag("Battery")) {
+        }
+        else if (other.gameObject.CompareTag("Battery")) {
             batteries += 1;
             Destroy(other.gameObject);
+        }
+        else if (other.gameObject.CompareTag("Drone")) {
+            drone.PickUpDrone();
+        }
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        if (collision.collider.gameObject.CompareTag("Drone")) {
+            drone.PickUpDrone();
         }
     }
 
