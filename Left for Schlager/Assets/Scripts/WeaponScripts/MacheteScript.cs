@@ -36,7 +36,8 @@ public class MacheteScript : MonoBehaviour{
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Zombie") && attacking) {
-            //other.gameObject.GetComponent<Zombie>().TakeDamage(attackDamage);
+            Debug.Log("HIT ZOMBIE!");
+            other.gameObject.GetComponent<Zombie>().TakeDamage(attackDamage);
         }
     }
 }

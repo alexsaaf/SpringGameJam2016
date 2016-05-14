@@ -51,8 +51,9 @@ public class PlayerStatusScript : MonoBehaviour {
     [SerializeField]
     private GameObject droneObject;
     private DroneControler drone;
-    
+
     // Machete fields
+    private GameObject machete;
 
     private bool enablePlayerInput = true;
 
@@ -109,6 +110,7 @@ public class PlayerStatusScript : MonoBehaviour {
         droneInUse = false;
         droneMoving = false;
         drone = droneObject.GetComponent<DroneControler>();
+        machete = transform.Find("MainCamera").Find("Machete").gameObject;
     }
 
     // Update is called once per frame
@@ -182,7 +184,7 @@ public class PlayerStatusScript : MonoBehaviour {
 
         }
         if (Input.GetAxisRaw("PrimaryFire") > 0) {
-            transform.Find("Machete").gameObject.GetComponent<MacheteScript>().SwingMachete();
+            machete.GetComponent<MacheteScript> ().SwingMachete();
         }
     }
 

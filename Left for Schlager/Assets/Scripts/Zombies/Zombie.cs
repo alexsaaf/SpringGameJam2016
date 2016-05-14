@@ -6,7 +6,8 @@
 public class Zombie : MonoBehaviour {
 
     #region Variable declarations
-    public float health = 100;
+    [SerializeField]
+    private float health;
 
     [Header("Mood-profiles")]
     public MoodProfile angryProfile = new MoodProfile();
@@ -150,6 +151,12 @@ public class Zombie : MonoBehaviour {
     //Take the given damage
     public void TakeDamage(float amount) {
         health -= amount;
+        Debug.Log("TAKE DAMAGE, now: " + health.ToString());
+        if(health <= 0)
+        {
+            Debug.Log("Is destroyed");
+            Destroy(this.gameObject);
+        }
     }
 
     //Check if we are dead lel
