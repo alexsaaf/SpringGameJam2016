@@ -55,6 +55,8 @@ public class PlayerStatusScript : MonoBehaviour {
     
     // Machete fields
 
+    private bool enablePlayerInput = true;
+
     #endregion
 
     #region Functions
