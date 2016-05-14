@@ -14,6 +14,8 @@ public class DroneControler : MonoBehaviour {
     private PlayerStatusScript playerStatusScript;
     [SerializeField]
     private float mouseSensitivity = 4F;
+    [SerializeField]
+    private float primaryDMG = 0F;
     private Vector3 input;
     private Vector3 inputMouse;
     private Rigidbody rb;
@@ -171,10 +173,11 @@ public class DroneControler : MonoBehaviour {
         Ray rayDirection = new Ray(transform.position, transform.up * -1);
         RaycastHit hitInfo;
         if (Physics.Raycast(rayDirection, out hitInfo, 100F)) {
+            Debug.Log("Found object (RayCast): " + hitInfo.transform.tag);
             if (hitInfo.transform.tag == "Zombie") {
                 return hitInfo.collider.gameObject;
             }
-            else return hitInfo.collider.gameObject;
+            else return null;
         }
         else {
             return null;
@@ -275,9 +278,8 @@ public class DroneControler : MonoBehaviour {
             if (Input.GetAxisRaw("SecondaryFire") > 0 && secondaryReady) {
                 GameObject gb = GetObjectInLine();
                 if (gb != null) {
-                    print(gb.tag);
+                    gb.GetComponent<Zombie>().TakeDamage(primaryDMG);
                 }
-                print("found not");
                 secondaryReady = false;
             }
             // Zoom

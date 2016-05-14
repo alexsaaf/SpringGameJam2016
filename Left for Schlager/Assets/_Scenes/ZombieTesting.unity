@@ -127,7 +127,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 92a0512f25794e24b9163bca4c7b9bf0, type: 2}
   m_IsPrefabParent: 0
---- !u!1001 &356154859
+--- !u!1001 &544782161
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -170,13 +170,17 @@ Prefab:
       propertyPath: playerObject
       value: 
       objectReference: {fileID: 1671408261}
+    - target: {fileID: 11478580, guid: 9f4ddbbd718a94f48bf88e91b7e64f97, type: 2}
+      propertyPath: primaryDMG
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9f4ddbbd718a94f48bf88e91b7e64f97, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &356154860 stripped
+--- !u!1 &627277584 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 144816, guid: 9f4ddbbd718a94f48bf88e91b7e64f97, type: 2}
-  m_PrefabInternal: {fileID: 356154859}
+  m_PrefabInternal: {fileID: 544782161}
 --- !u!1 &1267758335
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +298,11 @@ Prefab:
     - target: {fileID: 11450276, guid: 144fb6112c99a1047aa9851b85a1fd9b, type: 2}
       propertyPath: droneObject
       value: 
-      objectReference: {fileID: 356154860}
+      objectReference: {fileID: 627277584}
+    - target: {fileID: 11450276, guid: 144fb6112c99a1047aa9851b85a1fd9b, type: 2}
+      propertyPath: maxEnergy
+      value: 1000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 144fb6112c99a1047aa9851b85a1fd9b, type: 2}
   m_IsPrefabParent: 0
