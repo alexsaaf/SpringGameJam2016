@@ -137,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80720232b734099458a2489c78b6d66e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inUse: 0
 --- !u!1 &1251380444
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,7 +257,7 @@ GameObject:
   - 195: {fileID: 1546238602}
   m_Layer: 0
   m_Name: Zombie
-  m_TagString: Untagged
+  m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -272,7 +273,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 160
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -293,11 +294,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  state: 0
+  angryProfile:
+    runSpeed: 20
+    thinkTime: 1
+    playerDetectorEnabled: 1
+    giveUpDistance: 1e+9
+    eyeColor: {r: 1, g: 0, b: 0, a: 0}
+    strayDistance: 25
+    isAggressive: 1
+  happyProfile:
+    runSpeed: 15
+    thinkTime: 2
+    playerDetectorEnabled: 0
+    giveUpDistance: 20
+    eyeColor: {r: 0.23904654, g: 1, b: 0.09558821, a: 0}
+    strayDistance: 10
+    isAggressive: 0
+  sadProfile:
+    runSpeed: 5
+    thinkTime: 5
+    playerDetectorEnabled: 0
+    giveUpDistance: 10
+    eyeColor: {r: 0.6965513, g: 0, b: 1, a: 0}
+    strayDistance: 5
+    isAggressive: 1
+  mood: 1
+  eyes:
+  - {fileID: 1619915186}
+  - {fileID: 1881759882}
   viewRange: 20
-  attackRange: 5
-  thinkTimer: 5
-  randomUnitCircleRadius: 10
+  attackRange: 3
   isChasing: 0
   playerTransform: {fileID: 0}
 --- !u!23 &1546238604
@@ -400,7 +426,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 594ff042a1c5b8f4c8a67e2f1c547137, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -517,7 +543,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 594ff042a1c5b8f4c8a67e2f1c547137, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
