@@ -162,19 +162,28 @@ public class PlayerStatusScript : MonoBehaviour {
     private void UpdateInput() {
         if (Input.GetAxisRaw("UseRation") > 0) {
             UseRation();
-        } else if (Input.GetAxisRaw("Interact") > 0) {
+        }
+        if (Input.GetAxisRaw("Interact") > 0) {
             // INTERACT
-        } else if (Input.GetAxisRaw("DroneToggle") > 0) {
+        }
+        if (Input.GetAxisRaw("DroneToggle") > 0)
+        {
             // CHANGE TO DRONE
-            if (droneInUse && !droneMoving) {
+            if (droneInUse && !droneMoving)
+            {
                 drone.Resume();
-            } else { 
-                drone.Restart(transform.position + transform.forward*3);
+            }
+            else
+            {
+                drone.Restart(transform.position + transform.forward * 3);
             }
             droneInUse = true;
             droneMoving = true;
-        } else if (Input.GetAxisRaw("PrimaryFire") > 0) {
-            // ATATCK WITH MELEE, START ANIMATION
+
+        }
+        if (Input.GetAxisRaw("PrimaryFire") > 0) {
+            Debug.Log("FIRE");
+            transform.Find("Machete").gameObject.GetComponent<MacheteScript>().SwingMachete();
         }
     }
 
