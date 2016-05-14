@@ -5,29 +5,24 @@ public class PlayerStatusScript : MonoBehaviour {
 
     #region Variables
 
-    // Health fields
+    // Health and hunger fields
     [SerializeField]
+    private float maxHealth;
+    [SerializeField]
+    private float maxHunger;
     private float health;
-    [SerializeField]
     private float hunger;
     [SerializeField]
     private float healthFactor;
     [SerializeField]
     private float hungerFactor;
-    private float maxHealth;
-    private float maxHunger;
     private float time;
 
     // Energy fields
-    [SerializeField]
     private float energy;
     [SerializeField]
-    private float staticDroneDrain;
-    [SerializeField]
-    private float dynamicDroneDrain;
     private float maxEnergy;
-    private bool droneInUse;
-    private bool droneMoving;
+    private bool noEnergyLeft;
 
     // Player fields
     [SerializeField]
@@ -45,13 +40,29 @@ public class PlayerStatusScript : MonoBehaviour {
     private float hungerLimit;
     [SerializeField]
     private float hungrySpeed;
+    private bool enablePlayerInput;
+
+    // Drone fields
+    [SerializeField]
+    private float staticDroneDrain;
+    [SerializeField]
+    private float dynamicDroneDrain;
+    private bool droneInUse;
+    private bool droneMoving;
+    [SerializeField]
+    private GameObject droneObject;
+    private DroneControler drone;
+    
+    // Machete fields
+
+    private bool enablePlayerInput = true;
 
     #endregion
 
     #region Functions
 
     public void Hurt(float value) {
-    	health = Clamp(health - value, maxHealth, 0);
+        health = Clamp(health - value, maxHealth, 0);
     }
 
     public void UseRation() {
@@ -61,11 +72,14 @@ public class PlayerStatusScript : MonoBehaviour {
         }
     }
 
-    public void UseBattery() {
+    public bool UseBattery() {
         if (batteries > 0) {
             energy += BATTERY_REG;
             batteries--;
+            noEnergyLeft = false;
+            return true;
         }
+        return false;
     }
 
     public void SetDroneNotInUse() {
@@ -77,15 +91,20 @@ public class PlayerStatusScript : MonoBehaviour {
         droneMoving = false;
     }
 
+    public void SetEnablePlayerInput(bool flag) {
+        this.enablePlayerInput = flag;
+    }
+
     #endregion
 
     // Use this for initialization
     void Start() {
-        maxHealth = health;
-        maxHunger = hunger;
-        maxEnergy = energy;
+        health = maxHealth;
+        hunger = maxHunger;
+        energy = maxEnergy;
         droneInUse = false;
         droneMoving = false;
+        drone = droneObject.GetComponent<DroneControler>();
     }
 
     // Update is called once per frame
@@ -93,7 +112,9 @@ public class PlayerStatusScript : MonoBehaviour {
         UpdateHungerAndHealth();
         UpdateEnergy();
         //UpdateSpeed();
-        UpdateInput();
+        if (enablePlayerInput) {
+            UpdateInput();
+        }
     }
 
     #region Update_Functions
@@ -119,7 +140,9 @@ public class PlayerStatusScript : MonoBehaviour {
             }
         }
         if (energy == 0) {
-            UseBattery();
+            if (!UseBattery()) {
+                noEnergyLeft = true;
+            }
         }
     }
 
@@ -133,15 +156,21 @@ public class PlayerStatusScript : MonoBehaviour {
     }
 
     private void UpdateInput() {
-        if (Input.GetKeyDown(KeyCode.R)) {
+        if (Input.GetAxisRaw("UseRation") > 0) {
             UseRation();
-        } else if (Input.GetKeyDown(KeyCode.E)) {
+        } else if (Input.GetAxisRaw("Interact") > 0) {
             // INTERACT
-        } else if (Input.GetKeyDown(KeyCode.V)) {
-            //  CHANGE TO DRONE
+        } else if (Input.GetAxisRaw("DroneToggle") > 0) {
+            // CHANGE TO DRONE
+            if (droneInUse && !droneMoving) {
+                drone.Resume();
+            } else { 
+                drone.Restart(transform.position + transform.forward*3);
+            }
             droneInUse = true;
             droneMoving = true;
-            //Restart, Resume
+        } else if (Input.GetAxisRaw("PrimaryFire") > 0) {
+            // ATATCK WITH MELEE, START ANIMATION
         }
     }
 
