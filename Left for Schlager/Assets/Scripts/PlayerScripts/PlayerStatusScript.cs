@@ -183,9 +183,14 @@ public class PlayerStatusScript : MonoBehaviour {
         if (other.gameObject.CompareTag("Ration")) {
             rations += 1;
             Destroy(other.gameObject);
-        } else if (other.gameObject.CompareTag("Battery")) {
+        }
+        else if (other.gameObject.CompareTag("Battery")) {
             batteries += 1;
             Destroy(other.gameObject);
+        }
+        else if (other.gameObject.CompareTag("Drone")) {
+            Debug.Log("Pickin up drone");
+            drone.PickUpDrone();
         }
     }
 

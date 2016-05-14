@@ -153,6 +153,12 @@ public class DroneControler : MonoBehaviour {
         rb.useGravity = true;
     }
 
+    // pickup the drone
+    public void PickUpDrone() {
+        transform.eulerAngles = new Vector3(0F, 0F, 0F);
+        HideDrone();
+    }
+
     private GameObject GetObjectInLine() {
         Ray rayDirection = new Ray(transform.position, transform.up * -1);
         RaycastHit hitInfo;
@@ -284,6 +290,9 @@ public class DroneControler : MonoBehaviour {
         }
         else if (!releasedVAfterResume || (Time.time - timeWhenResumed) > 2) {
             releasedVAfterResume = true;
+        }
+        if (playerStatusScript.NoEnergyLeft()) {
+            KillAndFall();
         }
 	}
 
