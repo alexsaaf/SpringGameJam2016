@@ -40,7 +40,6 @@ public class PlayerStatusScript : MonoBehaviour {
     private float hungerLimit;
     [SerializeField]
     private float hungrySpeed;
-    private bool enablePlayerInput;
 
     // Drone fields
     [SerializeField]
@@ -93,6 +92,10 @@ public class PlayerStatusScript : MonoBehaviour {
 
     public void SetEnablePlayerInput(bool flag) {
         this.enablePlayerInput = flag;
+    }
+
+    public bool NoEnergyLeft() {
+        return noEnergyLeft;
     }
 
     #endregion
