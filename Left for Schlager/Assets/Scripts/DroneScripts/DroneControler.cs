@@ -293,7 +293,11 @@ public class DroneControler : MonoBehaviour {
             // Moln (Emotion change)
             if (Input.GetAxisRaw("Key1") > 0 && key1Ready) {
                 print("pressed Key" + 1);
-                Instantiate(Resources.Load("Bomb"), transform.position + transform.up * -1 * 3, new Quaternion(0F, 0F, 0F, 0F));
+                GameObject a = GameObject.Instantiate(Resources.Load("Bomb"), transform.position + transform.up * -1 * 3, new Quaternion(0F, 0F, 0F, 0F)) as GameObject;
+                
+                if (!playerStatusScript.UseEnergy(a.GetComponent<BombEngin>().energyConsuption)) {
+                    Destroy(a);
+                }
                 //Instantiate(weaponKey1, transform.position + transform.up * -1 * 3, new Quaternion(0F, 0F, 0F, 0F));
                 key1Ready = false;
             }

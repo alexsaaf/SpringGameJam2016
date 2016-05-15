@@ -9,6 +9,7 @@ public class BombEngin : MonoBehaviour {
     private float hitBoxRadious = 8;
     [SerializeField]
     private float explosionDamage = 20;
+    public float energyConsuption = 10F;
 
 	// Use this for initialization
 	void Start () {
