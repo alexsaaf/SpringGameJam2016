@@ -138,6 +138,14 @@ public class PlayerStatusScript : MonoBehaviour {
         }
     }
 
+    public bool UseEnergy(float energyToRemove) {
+        if ((energy - energyToRemove) > 0) {
+            energy = Clamp(energy - energyToRemove, maxEnergy, 0);
+            return true;
+        }
+        return false;
+    }
+
     private void UpdateEnergy() {
         if (droneInUse) {
             if (droneMoving) {
