@@ -63,11 +63,8 @@ public class DroneControler : MonoBehaviour {
     private AudioListener audioListener;
     private AudioListener playerAudioListener;
 
-    private bool togglePressed;
-    private float timeWhenResumed = 20F;
-    private bool releasedVAfterResume = true;
-    [SerializeField]
-    private float pressedTime = 1F;
+    private bool droneToggleReleased = true;
+
     #endregion
 
     // Use this for initialization
@@ -77,8 +74,6 @@ public class DroneControler : MonoBehaviour {
         HideDrone();
         animationDone = false;
         gotenStartPose = false;
-        togglePressed = false;
-        pressedTime = 0F;
 
         playerStatusScript = playerObject.GetComponent<PlayerStatusScript>();
 
@@ -140,7 +135,7 @@ public class DroneControler : MonoBehaviour {
         playerStatusScript.SetEnablePlayerInput(false);
         ControleDrone();
         ShowDrone();
-        releasedVAfterResume = false;
+        droneToggleReleased = false;
     }
 
     //Used to pause the drone and return control to the player
@@ -271,23 +266,16 @@ public class DroneControler : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         TickTimers();
-        if (animationDone && releasedVAfterResume) {
-            // Check time for when the DroneToggle is pressed
-            if (Input.GetAxisRaw("DroneToggle") > 0 && !togglePressed) {
-                pressedTime = Time.time;
-                togglePressed = true;
-                // if the time is below 1 sec go into idle else go back to user
+        if (animationDone) {
+            if (Input.GetAxisRaw("DroneToggle") == 0) {
+                droneToggleReleased = true;
             }
-            if (Input.GetAxisRaw("DroneToggle") == 0 && togglePressed) {
-                float pressedDeltaTime = Time.time - pressedTime;
-                print("deltatime pressed " + pressedDeltaTime);
-                if (pressedDeltaTime > 1F) {
-                    Kill();
-                }
-                else {
-                    Pause();
-                }
-                togglePressed = false;
+            // Check time for when the DroneToggle is pressed
+            if (Input.GetAxisRaw("DroneToggle") > 0 && droneToggleReleased) {
+                Pause();
+            }
+            if (Input.GetAxisRaw("DroneBack") > 0) {
+                Kill();
             }
             // El-Chock
             if (Input.GetAxisRaw("SecondaryFire") > 0 && secondaryReady) {
@@ -320,9 +308,6 @@ public class DroneControler : MonoBehaviour {
                 key3Ready = false;
             }
 
-        }
-        else if (!releasedVAfterResume || (Time.time - timeWhenResumed) > 2) {
-            releasedVAfterResume = true;
         }
         if (playerStatusScript.NoEnergyLeft()) {
             KillAndFall();
