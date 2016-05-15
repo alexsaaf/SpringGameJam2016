@@ -57,6 +57,8 @@ public class PlayerStatusScript : MonoBehaviour {
 
     private bool enablePlayerInput = true;
 
+    private bool droneToggleReleased = true;
+
     #endregion
 
     #region Functions
@@ -88,6 +90,7 @@ public class PlayerStatusScript : MonoBehaviour {
     }
 
     public void SetDroneIdle() {
+        droneToggleReleased = false;
         droneMoving = false;
     }
 
@@ -167,7 +170,10 @@ public class PlayerStatusScript : MonoBehaviour {
         if (Input.GetAxisRaw("Interact") > 0) {
             // INTERACT
         }
-        if (Input.GetAxisRaw("DroneToggle") > 0)
+        if (Input.GetAxisRaw("DroneToggle") == 0) {
+            droneToggleReleased = true;
+        }
+        if (Input.GetAxisRaw("DroneToggle") > 0 && droneToggleReleased)
         {
             // CHANGE TO DRONE
             if (droneInUse && !droneMoving)
