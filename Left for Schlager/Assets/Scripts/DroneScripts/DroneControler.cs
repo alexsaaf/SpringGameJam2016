@@ -51,11 +51,11 @@ public class DroneControler : MonoBehaviour {
     [SerializeField]
     private Canvas droneCrosshair;
     [SerializeField]
-    private GameObject weaponKey1;
+    private string weaponKey1;
     [SerializeField]
-    private GameObject weaponKey2;
+    private string weaponKey2;
     [SerializeField]
-    private GameObject weaponKey3;
+    private string weaponKey3;
 
     private Camera camera;
     private Camera playerCamera;
@@ -293,17 +293,24 @@ public class DroneControler : MonoBehaviour {
             // Moln (Emotion change)
             if (Input.GetAxisRaw("Key1") > 0 && key1Ready) {
                 print("pressed Key" + 1);
-                GameObject a = GameObject.Instantiate(Resources.Load("Bomb"), transform.position + transform.up * -1 * 3, new Quaternion(0F, 0F, 0F, 0F)) as GameObject;
-                
-                if (!playerStatusScript.UseEnergy(a.GetComponent<BombEngin>().energyConsuption)) {
-                    Destroy(a);
+
+                Collider[] colliders = Physics.OverlapBox(transform.position + transform.up * -20, new Vector3(3, 20, 3));
+                foreach (Collider c in colliders) {
+                    if (c.CompareTag("Zombie")) {
+                        print("hit Zombie");
+                        c.transform.GetComponent<Zombie>().mood = Zombie.States.Angry;
+                    }
                 }
-                //Instantiate(weaponKey1, transform.position + transform.up * -1 * 3, new Quaternion(0F, 0F, 0F, 0F));
                 key1Ready = false;
             }
             // Bomb, Invis-Cloud ...
             if (Input.GetAxisRaw("Key2") > 0 && key2Ready) {
                 print("pressed Key" + 2);
+                GameObject a = GameObject.Instantiate(Resources.Load(weaponKey1), transform.position + transform.up * -1 * 3, new Quaternion(0F, 0F, 0F, 0F)) as GameObject;
+
+                if (!playerStatusScript.UseEnergy(a.GetComponent<BombEngin>().energyConsuption)) {
+                    Destroy(a);
+                }
                 key2Ready = false;
             }
             // El-Bomb (Consumes much energy)

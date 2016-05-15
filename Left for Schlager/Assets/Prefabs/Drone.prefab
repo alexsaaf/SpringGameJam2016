@@ -196,15 +196,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  hightToRise: 20
+  hightToRise: 17.5
   playerObject: {fileID: 0}
   mouseSensitivity: 4
+  primaryDMG: 0
   primaryTimer: 1
   secondaryTimer: 1
   key1Timer: 1
   key2Timer: 1
   key3Timer: 1
-  pressedTime: 1
+  droneCrosshair: {fileID: 0}
+  weaponKey1: {fileID: 0}
+  weaponKey2: {fileID: 0}
+  weaponKey3: {fileID: 0}
 --- !u!124 &12460702
 Behaviour:
   m_ObjectHideFlags: 1
