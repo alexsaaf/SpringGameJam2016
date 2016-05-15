@@ -28,7 +28,7 @@ public class UIController : MonoBehaviour {
             hungerBar.fillAmount = pss.hunger / pss.maxHunger;
 
             rationsText.text = pss.rations.ToString();
-            batteryText.text = pss.rations.ToString();
+            batteryText.text = pss.batteries.ToString();
     }
 
     public void Win() {
