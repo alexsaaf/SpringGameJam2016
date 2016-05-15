@@ -38,7 +38,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &154170
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -93,11 +93,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 154170}
   m_LocalRotation: {x: 0.21249326, y: -0.8231716, z: -0.08323599, w: -0.5199106}
-  m_LocalPosition: {x: 0.88600016, y: 0.58599997, z: 1.134}
-  m_LocalScale: {x: 1.9832187, y: 0.11390403, z: 0.014058389}
+  m_LocalPosition: {x: 0.88600016, y: -0.014000058, z: 1.134}
+  m_LocalScale: {x: 1.9832187, y: 0.11390402, z: 0.01405839}
   m_Children: []
-  m_Father: {fileID: 490298}
-  m_RootOrder: 2
+  m_Father: {fileID: 454702}
+  m_RootOrder: 0
 --- !u!4 &454702
 Transform:
   m_ObjectHideFlags: 1
@@ -107,7 +107,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 453424}
   m_Father: {fileID: 490298}
   m_RootOrder: 0
 --- !u!4 &490298
@@ -122,7 +123,6 @@ Transform:
   m_Children:
   - {fileID: 454702}
   - {fileID: 402004}
-  - {fileID: 453424}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!20 &2092386
@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6a04e30b7c75243b6322b02e52ae3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDamage: 0
+  attackDamage: 50
 --- !u!114 &11491838
 MonoBehaviour:
   m_ObjectHideFlags: 1
