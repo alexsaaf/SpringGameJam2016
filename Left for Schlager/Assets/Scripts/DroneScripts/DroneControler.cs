@@ -49,8 +49,6 @@ public class DroneControler : MonoBehaviour {
     private bool key3Ready = true;
 
     [SerializeField]
-    private Canvas droneCrosshair;
-    [SerializeField]
     private string weaponKey1;
     [SerializeField]
     private string weaponKey2;
@@ -91,8 +89,6 @@ public class DroneControler : MonoBehaviour {
         key2TimerStart = key2Timer;
         key3TimerStart = key3Timer;
 
-        droneCrosshair.enabled = false;
-
         Debug.Log("Start Drone Done");
     }
 
@@ -117,7 +113,6 @@ public class DroneControler : MonoBehaviour {
     // Used to start from the begining not resuming
     public void Restart(Vector3 startPosition) {
         Debug.Log("Restarted Drone");
-        droneCrosshair.enabled = true;
         animationStartTime = Time.time;
         rb.useGravity = false;
         playerStatusScript.SetEnablePlayerInput(false);
@@ -130,7 +125,6 @@ public class DroneControler : MonoBehaviour {
     // Used to resume the control of the drone
     public void Resume() {
         Debug.Log("REsumed Drone");
-        droneCrosshair.enabled = true;
         rb.useGravity = false;
         playerStatusScript.SetEnablePlayerInput(false);
         ControleDrone();
@@ -141,7 +135,6 @@ public class DroneControler : MonoBehaviour {
     //Used to pause the drone and return control to the player
     private void Pause() {
         Debug.Log("Paused Drone");
-        droneCrosshair.enabled = false;
         ControlePlayer();
         playerStatusScript.SetDroneIdle();
         playerStatusScript.SetEnablePlayerInput(true);
@@ -150,7 +143,6 @@ public class DroneControler : MonoBehaviour {
     // Disable drone and return it to the user
      private void Kill() {
         Debug.Log("Killed drone");
-        droneCrosshair.enabled = false;
         ControlePlayer();
         HideDrone();
         Reset();
@@ -161,7 +153,6 @@ public class DroneControler : MonoBehaviour {
     // Disable drone and return it to the user
     private void KillAndFall() {
         Debug.Log("Kill and fall Drone");
-        droneCrosshair.enabled = false;
         ControlePlayer();
         Reset();
         playerStatusScript.SetDroneNotInUse();

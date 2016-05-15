@@ -61,6 +61,9 @@ public class PlayerStatusScript : MonoBehaviour
 
     private bool droneToggleReleased = true;
 
+    [SerializeField]
+    private GameObject UI;
+
     #endregion
 
     #region Functions
@@ -269,6 +272,9 @@ public class PlayerStatusScript : MonoBehaviour
         {
             drone.PickUpDrone();
         }
+        if (collision.collider.CompareTag("Goal")) {
+            UI.GetComponent<UIController>().Win();
+        }
     }
 
     public void TakeDamage(float amount)
@@ -279,6 +285,7 @@ public class PlayerStatusScript : MonoBehaviour
             if(health <= 0)
             {
                 //Loose
+                UI.GetComponent<UIController>().Die();
             }
             iTimer = iTime;
         }
