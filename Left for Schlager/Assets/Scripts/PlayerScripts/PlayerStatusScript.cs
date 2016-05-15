@@ -197,7 +197,7 @@ public class PlayerStatusScript : MonoBehaviour {
 
         }
         if (Input.GetAxisRaw("PrimaryFire") > 0) {
-            machete.GetComponent<MacheteScript> ().SwingMachete();
+            transform.Find("MainCamera").Find("Machete").GetComponent<MacheteScript> ().SwingMachete();
         }
     }
 

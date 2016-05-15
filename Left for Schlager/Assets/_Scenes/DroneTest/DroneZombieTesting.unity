@@ -270,6 +270,10 @@ Prefab:
       propertyPath: droneObject
       value: 
       objectReference: {fileID: 1874645626}
+    - target: {fileID: 9541020, guid: 271da782669a73249b7134f779d48552, type: 2}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 53e5d9bdd25a9e6459fce7bbb84d85e7, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 271da782669a73249b7134f779d48552, type: 2}
   m_IsPrefabParent: 0
