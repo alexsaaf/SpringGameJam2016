@@ -160,14 +160,6 @@ public class PlayerStatusScript : MonoBehaviour
         }
     }
 
-<<<<<<< HEAD
-    private void UpdateEnergy()
-    {
-        if (droneInUse)
-        {
-            if (droneMoving)
-            {
-=======
     public bool UseEnergy(float energyToRemove) {
         if ((energy - energyToRemove) > 0) {
             energy = Clamp(energy - energyToRemove, maxEnergy, 0);
@@ -179,7 +171,6 @@ public class PlayerStatusScript : MonoBehaviour
     private void UpdateEnergy() {
         if (droneInUse) {
             if (droneMoving) {
->>>>>>> 80cf6c08c0365a0c52559cc2ffd0753cdf4bb0df
                 energy = Clamp(energy - dynamicDroneDrain * Time.deltaTime, maxEnergy, 0);
             }
             else
@@ -237,14 +228,9 @@ public class PlayerStatusScript : MonoBehaviour
             droneMoving = true;
 
         }
-<<<<<<< HEAD
         if (Input.GetAxisRaw("PrimaryFire") > 0)
         {
             machete.GetComponent<MacheteScript>().SwingMachete();
-=======
-        if (Input.GetAxisRaw("PrimaryFire") > 0) {
-            transform.Find("MainCamera").Find("Machete").GetComponent<MacheteScript> ().SwingMachete();
->>>>>>> 80cf6c08c0365a0c52559cc2ffd0753cdf4bb0df
         }
     }
 
