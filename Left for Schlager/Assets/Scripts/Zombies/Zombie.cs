@@ -34,9 +34,6 @@ public class Zombie : MonoBehaviour {
 
     public bool isChasing = false;
 
-    [SerializeField]
-    private float damage;
-
     private PlayerDetector playerDetector;
     private NavMeshAgent agent;
     public Transform playerTransform;
@@ -83,6 +80,11 @@ public class Zombie : MonoBehaviour {
             
     }
 
+    //update the mode
+    public void updateMode() {
+
+    }
+
     //Update the color of our eyes according to our mood
     private void UpdateEyeColor() {
         for (int i = 0; i < eyes.Length; i++) {
@@ -121,7 +123,6 @@ public class Zombie : MonoBehaviour {
             if (Physics.Raycast(ray, out hitinfo, attackRange)) {
                 if(hitinfo.collider.tag == "Player") {
                     agent.Stop();           //If we are in range to hit, dont keep chasing
-                    playerTransform.gameObject.GetComponent<PlayerStatusScript>().TakeDamage(damage);
                 } else {
                     Chase();        //Not the plyer, we can chase
                 }
