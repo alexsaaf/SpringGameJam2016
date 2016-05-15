@@ -50,6 +50,12 @@ public class DroneControler : MonoBehaviour {
 
     [SerializeField]
     private Canvas droneCrosshair;
+    [SerializeField]
+    private GameObject weaponKey1;
+    [SerializeField]
+    private GameObject weaponKey2;
+    [SerializeField]
+    private GameObject weaponKey3;
 
     private Camera camera;
     private Camera playerCamera;
@@ -299,7 +305,8 @@ public class DroneControler : MonoBehaviour {
             // Moln (Emotion change)
             if (Input.GetAxisRaw("Key1") > 0 && key1Ready) {
                 print("pressed Key" + 1);
-                Instantiate(Resources.Load("Assets/Prefabs/Bomb"));
+                Instantiate(Resources.Load("Bomb"), transform.position + transform.up * -1 * 3, new Quaternion(0F, 0F, 0F, 0F));
+                //Instantiate(weaponKey1, transform.position + transform.up * -1 * 3, new Quaternion(0F, 0F, 0F, 0F));
                 key1Ready = false;
             }
             // Bomb, Invis-Cloud ...
