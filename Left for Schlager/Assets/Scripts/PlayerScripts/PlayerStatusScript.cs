@@ -38,6 +38,10 @@ public class PlayerStatusScript : MonoBehaviour
     private float hungrySpeed;
     //Used to ensure we cant eat a ration every tick, not even Kevin is that hungry.
     private float rationCooldown;
+    //While >0, player is invulnerable.
+    private float iTimer;
+    [SerializeField]
+    private float iTime; //Total time in seconds the player is invulnerable after taking damage.
 
     // Drone fields
     [SerializeField]
@@ -156,7 +160,12 @@ public class PlayerStatusScript : MonoBehaviour
         }
         if (rationCooldown > 0)
         {
-            rationCooldown -= Time.deltaTime;
+            rationCooldown -= time;
+        }
+
+        if (iTimer > 0)
+        {
+            iTimer -= time;
         }
     }
 
@@ -259,6 +268,19 @@ public class PlayerStatusScript : MonoBehaviour
         if (collision.collider.gameObject.CompareTag("Drone"))
         {
             drone.PickUpDrone();
+        }
+    }
+
+    public void TakeDamage(float amount)
+    {
+        if (iTimer <= 0)
+        {
+            health -= amount;
+            if(health <= 0)
+            {
+                //Loose
+            }
+            iTimer = iTime;
         }
     }
 

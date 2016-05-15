@@ -134,7 +134,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 190186}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.11, y: 1.11, z: 13.36}
+  m_LocalPosition: {x: -7.1548886, y: 1.69, z: 3.697457}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 451350}
@@ -303,13 +303,14 @@ MonoBehaviour:
     eyeColor: {r: 0.6965513, g: 0, b: 1, a: 0}
     strayDistance: 5
     isAggressive: 1
-  mood: 1
+  mood: 2
   eyes:
   - {fileID: 157298}
   - {fileID: 187400}
   viewRange: 20
   attackRange: 3
   isChasing: 0
+  damage: 10
   playerTransform: {fileID: 0}
 --- !u!114 &11466320
 MonoBehaviour:
