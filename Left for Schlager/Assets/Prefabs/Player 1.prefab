@@ -268,7 +268,7 @@ Animator:
   m_GameObject: {fileID: 154170}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7a734dcc85879d0408dd1d5266c7d878, type: 2}
+  m_Controller: {fileID: 9100000, guid: 53e5d9bdd25a9e6459fce7bbb84d85e7, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -357,14 +357,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   maxHunger: 100
-  healthFactor: 0.5
-  hungerFactor: 0.1
+  health: 0
+  hunger: 0
+  healthFactor: 5
+  hungerFactor: 2
+  energy: 0
   maxEnergy: 100
   normalSpeed: 5
   rations: 5
   batteries: 5
   hungerLimit: 0
   hungrySpeed: 0
+  iTime: 1
   staticDroneDrain: 0.1
   dynamicDroneDrain: 0.1
   droneObject: {fileID: 0}

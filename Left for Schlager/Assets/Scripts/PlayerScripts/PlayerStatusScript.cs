@@ -38,6 +38,10 @@ public class PlayerStatusScript : MonoBehaviour
     private float hungrySpeed;
     //Used to ensure we cant eat a ration every tick, not even Kevin is that hungry.
     private float rationCooldown;
+    //While >0, player is invulnerable.
+    private float iTimer;
+    [SerializeField]
+    private float iTime; //Total time in seconds the player is invulnerable after taking damage.
 
     // Drone fields
     [SerializeField]
@@ -156,18 +160,15 @@ public class PlayerStatusScript : MonoBehaviour
         }
         if (rationCooldown > 0)
         {
-            rationCooldown -= Time.deltaTime;
+            rationCooldown -= time;
+        }
+
+        if (iTimer > 0)
+        {
+            iTimer -= time;
         }
     }
 
-<<<<<<< HEAD
-    private void UpdateEnergy()
-    {
-        if (droneInUse)
-        {
-            if (droneMoving)
-            {
-=======
     public bool UseEnergy(float energyToRemove) {
         if ((energy - energyToRemove) > 0) {
             energy = Clamp(energy - energyToRemove, maxEnergy, 0);
@@ -179,7 +180,6 @@ public class PlayerStatusScript : MonoBehaviour
     private void UpdateEnergy() {
         if (droneInUse) {
             if (droneMoving) {
->>>>>>> 80cf6c08c0365a0c52559cc2ffd0753cdf4bb0df
                 energy = Clamp(energy - dynamicDroneDrain * Time.deltaTime, maxEnergy, 0);
             }
             else
@@ -237,14 +237,10 @@ public class PlayerStatusScript : MonoBehaviour
             droneMoving = true;
 
         }
-<<<<<<< HEAD
+
         if (Input.GetAxisRaw("PrimaryFire") > 0)
         {
             machete.GetComponent<MacheteScript>().SwingMachete();
-=======
-        if (Input.GetAxisRaw("PrimaryFire") > 0) {
-            transform.Find("MainCamera").Find("Machete").GetComponent<MacheteScript> ().SwingMachete();
->>>>>>> 80cf6c08c0365a0c52559cc2ffd0753cdf4bb0df
         }
     }
 
@@ -273,6 +269,19 @@ public class PlayerStatusScript : MonoBehaviour
         if (collision.collider.gameObject.CompareTag("Drone"))
         {
             drone.PickUpDrone();
+        }
+    }
+
+    public void TakeDamage(float amount)
+    {
+        if (iTimer <= 0)
+        {
+            health -= amount;
+            if(health <= 0)
+            {
+                //Loose
+            }
+            iTimer = iTime;
         }
     }
 
