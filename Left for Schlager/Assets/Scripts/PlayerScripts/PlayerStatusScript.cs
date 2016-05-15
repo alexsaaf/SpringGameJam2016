@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerStatusScript : MonoBehaviour {
+public class PlayerStatusScript : MonoBehaviour
+{
 
     #region Variables
 
     // Health and hunger fields
-    [SerializeField]
-    private float maxHealth;
-    [SerializeField]
-    private float maxHunger;
-    private float health;
-    private float hunger;
+    public float maxHealth;
+    public float maxHunger;
+    public float health;
+    public float hunger;
     [SerializeField]
     private float healthFactor;
     [SerializeField]
@@ -19,9 +18,8 @@ public class PlayerStatusScript : MonoBehaviour {
     private float time;
 
     // Energy fields
-    private float energy;
-    [SerializeField]
-    private float maxEnergy;
+    public float energy;
+    public float maxEnergy;
     private bool noEnergyLeft;
 
     // Player fields
@@ -32,14 +30,14 @@ public class PlayerStatusScript : MonoBehaviour {
     private float speed;
     [SerializeField]
     private float normalSpeed;
-    [SerializeField]
-    private int rations;
-    [SerializeField]
-    private int batteries;
+    public int rations;
+    public int batteries;
     [SerializeField]
     private float hungerLimit;
     [SerializeField]
     private float hungrySpeed;
+    //Used to ensure we cant eat a ration every tick, not even Kevin is that hungry.
+    private float rationCooldown;
 
     // Drone fields
     [SerializeField]
@@ -63,19 +61,29 @@ public class PlayerStatusScript : MonoBehaviour {
 
     #region Functions
 
-    public void Hurt(float value) {
+    public void Hurt(float value)
+    {
         health = Clamp(health - value, maxHealth, 0);
     }
 
-    public void UseRation() {
-        if (rations > 0) {
-            hunger = Clamp(RATION_REG, maxHunger, 0);
+    public void UseRation()
+    {
+        if (rationCooldown <= 0 && rations > 0)
+        {
+            hunger += RATION_REG;
+            if (hunger > maxHunger)
+            {
+                hunger = maxHunger;
+            }
             rations--;
+            rationCooldown = 1;
         }
     }
 
-    public bool UseBattery() {
-        if (batteries > 0) {
+    public bool UseBattery()
+    {
+        if (batteries > 0)
+        {
             energy += BATTERY_REG;
             batteries--;
             noEnergyLeft = false;
@@ -84,28 +92,33 @@ public class PlayerStatusScript : MonoBehaviour {
         return false;
     }
 
-    public void SetDroneNotInUse() {
+    public void SetDroneNotInUse()
+    {
         droneInUse = false;
         droneMoving = false;
     }
 
-    public void SetDroneIdle() {
+    public void SetDroneIdle()
+    {
         droneToggleReleased = false;
         droneMoving = false;
     }
 
-    public void SetEnablePlayerInput(bool flag) {
+    public void SetEnablePlayerInput(bool flag)
+    {
         this.enablePlayerInput = flag;
     }
 
-    public bool NoEnergyLeft() {
+    public bool NoEnergyLeft()
+    {
         return noEnergyLeft;
     }
 
     #endregion
-        
+
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         health = maxHealth;
         hunger = maxHunger;
         energy = maxEnergy;
@@ -116,61 +129,83 @@ public class PlayerStatusScript : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
         UpdateHungerAndHealth();
         UpdateEnergy();
         //UpdateSpeed();
-        if (enablePlayerInput) {
+        if (enablePlayerInput)
+        {
             UpdateInput();
         }
     }
 
     #region Update_Functions
 
-    private void UpdateHungerAndHealth() {
+    private void UpdateHungerAndHealth()
+    {
         time = Time.deltaTime;
-        if (hunger > 0) {
+        if (hunger > 0)
+        {
             hunger = Clamp(hunger - hungerFactor * time, maxHunger, 0);
-            if (health < maxHealth) {
+            if (health < maxHealth)
+            {
                 hunger = hunger - hungerFactor * time;
                 health = health + healthFactor * time;
             }
         }
+        if (rationCooldown > 0)
+        {
+            rationCooldown -= Time.deltaTime;
+        }
     }
 
-    private void UpdateEnergy() {
-        if (droneInUse) {
-            if (droneMoving) {
+    private void UpdateEnergy()
+    {
+        if (droneInUse)
+        {
+            if (droneMoving)
+            {
                 energy = Clamp(energy - dynamicDroneDrain * Time.deltaTime, maxEnergy, 0);
             }
-            else {
+            else
+            {
                 energy = Clamp(energy - staticDroneDrain * Time.deltaTime, maxEnergy, 0);
             }
         }
-        if (energy == 0) {
-            if (!UseBattery()) {
+        if (energy == 0)
+        {
+            if (!UseBattery())
+            {
                 noEnergyLeft = true;
             }
         }
     }
 
-    private void UpdateSpeed() {
-        if (hunger < hungerLimit) {
+    private void UpdateSpeed()
+    {
+        if (hunger < hungerLimit)
+        {
             speed = hungrySpeed;
         }
-        else if (hunger >= hungerLimit && speed != normalSpeed) {
+        else if (hunger >= hungerLimit && speed != normalSpeed)
+        {
             speed = normalSpeed;
         }
     }
 
-    private void UpdateInput() {
-        if (Input.GetAxisRaw("UseRation") > 0) {
+    private void UpdateInput()
+    {
+        if (Input.GetAxisRaw("UseRation") > 0)
+        {
             UseRation();
         }
-        if (Input.GetAxisRaw("Interact") > 0) {
+        if (Input.GetAxisRaw("Interact") > 0)
+        {
             // INTERACT
         }
-        if (Input.GetAxisRaw("DroneToggle") == 0) {
+        if (Input.GetAxisRaw("DroneToggle") == 0)
+        {
             droneToggleReleased = true;
         }
         if (Input.GetAxisRaw("DroneToggle") > 0 && droneToggleReleased)
@@ -188,39 +223,52 @@ public class PlayerStatusScript : MonoBehaviour {
             droneMoving = true;
 
         }
-        if (Input.GetAxisRaw("PrimaryFire") > 0) {
-            machete.GetComponent<MacheteScript> ().SwingMachete();
+        if (Input.GetAxisRaw("PrimaryFire") > 0)
+        {
+            machete.GetComponent<MacheteScript>().SwingMachete();
         }
     }
 
     #endregion
-     
-    void OnTriggerEnter(Collider other) {
-        if (other.gameObject.CompareTag("Ration")) {
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ration"))
+        {
             rations += 1;
             Destroy(other.gameObject);
         }
-        else if (other.gameObject.CompareTag("Battery")) {
+        else if (other.gameObject.CompareTag("Battery"))
+        {
             batteries += 1;
             Destroy(other.gameObject);
         }
-        else if (other.gameObject.CompareTag("Drone")) {
+        else if (other.gameObject.CompareTag("Drone"))
+        {
             drone.PickUpDrone();
         }
     }
 
-    void OnCollisionEnter(Collision collision) {
-        if (collision.collider.gameObject.CompareTag("Drone")) {
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.gameObject.CompareTag("Drone"))
+        {
             drone.PickUpDrone();
         }
     }
 
-    private float Clamp(float value, float maxValue, float minValue) {
-        if (value > maxValue) {
+    private float Clamp(float value, float maxValue, float minValue)
+    {
+        if (value > maxValue)
+        {
             return maxValue;
-        } else if (value < minValue) {
+        }
+        else if (value < minValue)
+        {
             return minValue;
-        } else {
+        }
+        else
+        {
             return value;
         }
     }
